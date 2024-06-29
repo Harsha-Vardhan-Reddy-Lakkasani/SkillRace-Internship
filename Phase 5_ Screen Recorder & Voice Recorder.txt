@@ -1,0 +1,104 @@
+                                                               SkillRace Internship
+
+								Phase 5 - Final Project
+Create a Screen Recorder & Voice Recorder Seperately Using Python 
+
+Source Code : 
+
+import cv2
+import numpy as np
+import pyautogui
+import pyaudio
+import wave
+import sys
+
+def screen_recorder(output_file, fps=20, duration=10):
+    screen_size = pyautogui.size()
+    fourcc = cv2.VideoWriter_fourcc(*"XVID")
+    out = cv2.VideoWriter(output_file, fourcc, fps, screen_size)
+
+    end_time = cv2.getTickCount() + duration * cv2.getTickFrequency()
+
+    print("Recording screen...")
+
+    while cv2.getTickCount() < end_time:
+        img = pyautogui.screenshot()
+        frame = np.array(img)
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        out.write(frame)
+
+    out.release()
+    print("Screen recording completed.")
+
+def voice_recorder(output_file, duration=10, sample_rate=44100, chunk_size=1024, channels=1):
+    audio = pyaudio.PyAudio()
+
+    stream = audio.open(format=pyaudio.paInt16,
+                        channels=channels,
+                        rate=sample_rate,
+                        input=True,
+                        frames_per_buffer=chunk_size)
+
+    print("Recording voice...")
+
+    frames = []
+
+    for _ in range(0, int(sample_rate / chunk_size * duration)):
+        data = stream.read(chunk_size)
+        frames.append(data)
+
+    print("Voice recording completed.")
+
+    stream.stop_stream()
+    stream.close()
+    audio.terminate()
+
+    wf = wave.open(output_file, 'wb')
+    wf.setnchannels(channels)
+    wf.setsampwidth(audio.get_sample_size(pyaudio.paInt16))
+    wf.setframerate(sample_rate)
+    wf.writeframes(b''.join(frames))
+    wf.close()
+
+def main():
+    print("Choose an option:")
+    print("1. Screen Recorder")
+    print("2. Voice Recorder")
+    choice = input("Enter 1 or 2: ")
+
+    if choice == '1':
+        output_file = input("Enter the output file name (e.g., output.avi): ")
+        duration = int(input("Enter the duration in seconds: "))
+        screen_recorder(output_file, duration=duration)
+    elif choice == '2':
+        output_file = input("Enter the output file name (e.g., output.wav): ")
+        duration = int(input("Enter the duration in seconds: "))
+        voice_recorder(output_file, duration=duration)
+    else:
+        print("Invalid choice. Exiting.")
+        sys.exit()
+
+if __name__ == "__main__":
+    main()
+
+Output for Screen Recorder : 
+
+Choose an option:
+1. Screen Recorder
+2. Voice Recorder
+Enter 1 or 2: 1
+Enter the output file name (e.g., output.avi): h.avi
+Enter the duration in seconds: 7
+Recording screen...
+Screen recording completed.
+
+Output for Voice Recorder: 
+
+Choose an option:
+1. Screen Recorder
+2. Voice Recorder
+Enter 1 or 2: 2
+Enter the output file name (e.g., output.wav): Voice Recorder.wav
+Enter the duration in seconds: 15
+Recording voice...
+Voice recording completed.
