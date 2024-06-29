@@ -87,7 +87,7 @@ Choose an option:
 1. Screen Recorder
 2. Voice Recorder
 Enter 1 or 2: 1
-Enter the output file name (e.g., output.avi): h.avi
+Enter the output file name (e.g., output.avi): ScreenRecorder.avi
 Enter the duration in seconds: 7
 Recording screen...
 Screen recording completed.
