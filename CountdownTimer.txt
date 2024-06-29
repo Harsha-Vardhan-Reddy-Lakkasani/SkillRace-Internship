@@ -1,0 +1,31 @@
+							  SkillRace Internship
+
+                                                                  Phase 3
+
+
+ Task 3:
+
+Create a Countdown Timer Using Python
+
+Source Code : 
+
+import time
+
+def countdown_timer():
+    total_seconds = int(input("Enter the time in seconds for the countdown: "))
+    
+    while total_seconds:
+        mins, secs = divmod(total_seconds, 60)
+        timer = '{:02d}:{:02d}'.format(mins, secs)
+        print(timer, end="\r")
+        time.sleep(1)
+        total_seconds -= 1
+
+    print('Time is up!')
+
+countdown_timer()
+
+Output :
+
+Enter the time in seconds for the countdown: 9
+Time is up!
